@@ -1,13 +1,13 @@
-import express, { Request, Response } from "express";
+import connectDB from "./DB";
+import app from "./app";
 import { config } from "./config";
-const app = express();
 
 const port = config.port || 5000;
 
-app.get("/", (req: Request, res: Response) => {
-  res.send("hello world!!!");
-});
-
-app.listen(port, () => {
-  console.log(`server listening on ${port}`);
-});
+connectDB()
+  .then(() => {
+    app.listen(port, () => {
+      console.log(`server listening on ${port}`);
+    });
+  })
+  .catch((err) => console.log("Failed to connect to database.", err));
