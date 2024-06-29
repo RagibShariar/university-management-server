@@ -1,12 +1,8 @@
 export type Student = {
   id: string;
-  name: {
-    firstName: string;
-    middleName: string;
-    lastName: string;
-  };
+  name: Name;
   email: string;
-  gender: "male" | "female";
+  gender: "male" | "female" | "others";
   dateOfBirth?: string;
   contactNo: string;
   emergencyContactNo: string;
@@ -26,6 +22,12 @@ export type Student = {
   localGuardian: LocalGuardian;
   image?: string;
   isActive: "active" | "blocked";
+};
+
+export type Name = {
+  firstName: string;
+  middleName: string;
+  lastName: string;
 };
 
 export type Guardian = {

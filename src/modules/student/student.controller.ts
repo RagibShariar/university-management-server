@@ -17,7 +17,11 @@ const createStudent = async (req: Request, res: Response) => {
       data: result,
     });
   } catch (error) {
-    console.log("Something went wrong while creating student", error);
+    res.status(500).json({
+      success: false,
+      message: "Something went wrong while creating student",
+      error: error,
+    });
   }
 };
 
@@ -50,6 +54,7 @@ const getSingleStudent = async (req: Request, res: Response) => {
     res.status(500).json({
       success: false,
       message: "Something went wrong while getting a single student",
+      error: error
     });
   }
 };

@@ -1,53 +1,131 @@
 import mongoose, { Schema } from "mongoose";
-import { Student as IStudent } from "./student.interface";
+import {
+  Guardian,
+  Student as IStudent,
+  LocalGuardian,
+  Name,
+} from "./student.interface";
+
+const nameSchema = new Schema<Name>({
+  firstName: {
+    type: String,
+    required: true,
+    trim: true,
+    maxlength: [20, "First name can not be more than 20 characters."],
+  },
+  middleName: { type: String, trim: true },
+  lastName: { type: String, required: true, trim: true },
+});
+const guardianSchema = new Schema<Guardian>({
+  fatherName: { type: String, required: true, trim: true },
+  fatherOccupation: { type: String, required: true, trim: true },
+  fatherContactNo: { type: String, required: true, trim: true },
+  fatherEmail: { type: String, trim: true },
+  motherName: { type: String, required: true, trim: true },
+  motherOccupation: { type: String, required: true, trim: true },
+  motherContactNo: { type: String, required: true, trim: true },
+  motherEmail: { type: String, trim: true },
+});
+const localGuardianSchema = new Schema<LocalGuardian>({
+  name: { type: String, required: true, trim: true },
+  occupation: { type: String, required: true, trim: true },
+  contactNo: { type: String, required: true, trim: true },
+  email: { type: String, trim: true },
+  address: { type: String, required: true, trim: true },
+  relation: { type: String, required: true, trim: true },
+});
 
 //! Student Schema
 const studentSchema = new Schema<IStudent>(
   {
-    id: { type: String, unique: true },
-    name: {
-      firstName: { type: String, required: true },
-      middleName: { type: String },
-      lastName: { type: String, required: true },
+    id: {
+      type: String,
+      required: [true, "ID is required"],
+      unique: true,
+      trim: true,
     },
-    email: { type: String, required: true },
-    gender: ["male", "female"],
+    name: {
+      type: nameSchema,
+      required: [true, "Name is required"],
+    },
+    email: {
+      type: String,
+      required: [true, "Email is required"],
+      unique: true,
+      trim: true,
+    },
+    gender: {
+      type: String,
+      enum: {
+        values: ["male", "female", "others"],
+        message: "{VALUE} is not a valid gender",
+      },
+      required: [true, "Gender is required"],
+    },
     dateOfBirth: { type: Date },
-    contactNo: { type: String, required: true },
-    emergencyContactNo: { type: String, required: true },
-    bloodGroup: ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"],
-    presentAddress: { type: String, required: true },
-    permanentAddress: { type: String, required: true },
-    nationality: { type: String, required: true },
-    religion: { type: String, required: true },
-    maritalStatus: [
-      "Single",
-      "Married",
-      "Divorced",
-      "Widowed",
-      "Separated",
-      "Partnered",
-    ],
+    contactNo: {
+      type: String,
+      required: [true, "Contact number is required"],
+      trim: true,
+    },
+    emergencyContactNo: {
+      type: String,
+      required: [true, "Emergency contact number is required"],
+      trim: true,
+    },
+    bloodGroup: {
+      type: String,
+      enum: {
+        values: ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"],
+        message: "{VALUES} is not a valid blood group!!!",
+      },
+    },
+    presentAddress: {
+      type: String,
+      required: [true, "Present address is required"],
+      trim: true,
+    },
+    permanentAddress: {
+      type: String,
+      required: [true, "Permanent address is required"],
+      trim: true,
+    },
+    nationality: {
+      type: String,
+      required: [true, "Nationality is required"],
+      trim: true,
+    },
+    religion: {
+      type: String,
+      required: [true, "Religion is required"],
+      trim: true,
+    },
+    maritalStatus: {
+      type: String,
+      enum: [
+        "Single",
+        "Married",
+        "Divorced",
+        "Widowed",
+        "Separated",
+        "Partnered",
+      ],
+      trim: true,
+    },
     guardian: {
-      fatherName: { type: String, required: true },
-      fatherOccupation: { type: String, required: true },
-      fatherContactNo: { type: String, required: true },
-      fatherEmail: { type: String },
-      motherName: { type: String, required: true },
-      motherOccupation: { type: String, required: true },
-      motherContactNo: { type: String, required: true },
-      motherEmail: { type: String },
+      type: guardianSchema,
+      required: [true, "Guardian information is required"],
     },
     localGuardian: {
-      name: { type: String, required: true },
-      occupation: { type: String, required: true },
-      contactNo: { type: String, required: true },
-      email: { type: String },
-      address: { type: String, required: true },
-      relation: { type: String, required: true },
+      type: localGuardianSchema,
+      required: [true, "Local guardian information is required"],
     },
-    image: { type: String },
-    isActive: ["active", "blocked"],
+    image: { type: String, trim: true },
+    isActive: {
+      type: String,
+      enum: ["active", "blocked"],
+      default: "active",
+    },
   },
   { timestamps: true }
 );
