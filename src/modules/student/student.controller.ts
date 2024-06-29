@@ -1,5 +1,9 @@
 import { Request, Response } from "express";
-import { createStudentToDB, getAllStudentsFromDB } from "./student.service";
+import {
+  createStudentToDB,
+  getAllStudentsFromDB,
+  getSingleStudentFromDB,
+} from "./student.service";
 
 // Create a new student
 const createStudent = async (req: Request, res: Response) => {
@@ -31,4 +35,23 @@ const getAllStudents = async (req: Request, res: Response) => {
   }
 };
 
-export { createStudent , getAllStudents};
+// get a single student
+const getSingleStudent = async (req: Request, res: Response) => {
+  try {
+    const { studentId } = req.params;
+    const result = await getSingleStudentFromDB(studentId);
+
+    res.status(200).json({
+      success: true,
+      message: "Student retrieved successfully",
+      data: result,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Something went wrong while getting a single student",
+    });
+  }
+};
+
+export { createStudent, getAllStudents, getSingleStudent };
