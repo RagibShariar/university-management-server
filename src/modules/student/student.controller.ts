@@ -4,16 +4,18 @@ import {
   getAllStudentsFromDB,
   getSingleStudentFromDB,
 } from "./student.service";
+import { studentValidationSchema } from "./student.validation";
 
 // Create a new student
 const createStudent = async (req: Request, res: Response) => {
   try {
     const studentData = req.body;
-    const result = await createStudentToDB(studentData);
+    const zodParsedData = studentValidationSchema.parse(studentData)
+    const result = await createStudentToDB(zodParsedData);
 
     res.status(200).json({
       success: true,
-      messsage: "Student created successfully",
+      message: "Student created successfully",
       data: result,
     });
   } catch (error) {

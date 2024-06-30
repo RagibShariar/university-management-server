@@ -22,6 +22,7 @@ export type Student = {
   localGuardian: LocalGuardian;
   image?: string;
   isActive: "active" | "blocked";
+  isDeleted: boolean;
 };
 
 export type Name = {

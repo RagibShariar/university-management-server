@@ -5,6 +5,7 @@ import {
   LocalGuardian,
   Name,
 } from "./student.interface";
+import { boolean } from "zod";
 
 const nameSchema = new Schema<Name>({
   firstName: {
@@ -31,7 +32,7 @@ const localGuardianSchema = new Schema<LocalGuardian>({
   occupation: { type: String, required: true, trim: true },
   contactNo: { type: String, required: true, trim: true },
   email: { type: String, trim: true },
-  address: { type: String, required: true, trim: true },
+  address: { type: String, trim: true },
   relation: { type: String, required: true, trim: true },
 });
 
@@ -110,7 +111,6 @@ const studentSchema = new Schema<IStudent>(
         "Separated",
         "Partnered",
       ],
-      trim: true,
     },
     guardian: {
       type: guardianSchema,
@@ -126,6 +126,10 @@ const studentSchema = new Schema<IStudent>(
       enum: ["active", "blocked"],
       default: "active",
     },
+    isDeleted: {
+      type: Boolean,
+      default: false,
+    }
   },
   { timestamps: true }
 );
