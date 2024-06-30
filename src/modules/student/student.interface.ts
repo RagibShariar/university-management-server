@@ -1,7 +1,10 @@
+import { Model } from "mongoose";
+
 export type Student = {
   id: string;
   name: Name;
   email: string;
+  password: string;
   gender: "male" | "female" | "others";
   dateOfBirth?: string;
   contactNo: string;
@@ -51,3 +54,8 @@ export type LocalGuardian = {
   address: string;
   relation: string;
 };
+
+//todo: Creating a Mongoose custom static methods
+export interface StudentModel extends Model<Student> {
+  isStudentExists(id: string): Promise<Student | null>;
+}

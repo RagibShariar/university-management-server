@@ -4,8 +4,8 @@ import {
   Student as IStudent,
   LocalGuardian,
   Name,
+  StudentModel,
 } from "./student.interface";
-import { boolean } from "zod";
 
 const nameSchema = new Schema<Name>({
   firstName: {
@@ -37,7 +37,7 @@ const localGuardianSchema = new Schema<LocalGuardian>({
 });
 
 //! Student Schema
-const studentSchema = new Schema<IStudent>(
+const studentSchema = new Schema<IStudent, StudentModel>(
   {
     id: {
       type: String,
@@ -54,6 +54,11 @@ const studentSchema = new Schema<IStudent>(
       required: [true, "Email is required"],
       unique: true,
       trim: true,
+    },
+    password: {
+      type: String,
+      minlength: [6, "password must be at least 6 characters or longer"],
+      required: [true, "Password is required"],
     },
     gender: {
       type: String,
@@ -129,10 +134,19 @@ const studentSchema = new Schema<IStudent>(
     isDeleted: {
       type: Boolean,
       default: false,
-    }
+    },
   },
   { timestamps: true }
 );
 
+//todo: Creating a Mongoose custom static method
+studentSchema.statics.isStudentExists = async function (id) {
+  const existingStudent = await Student.findOne({ id: id });
+  return existingStudent;
+};
+
 //! Student model
-export const Student = mongoose.model<IStudent>("Student", studentSchema);
+export const Student = mongoose.model<IStudent, StudentModel>(
+  "Student",
+  studentSchema
+);
