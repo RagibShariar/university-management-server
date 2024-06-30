@@ -1,4 +1,6 @@
+import bcrypt from "bcryptjs";
 import mongoose, { Schema } from "mongoose";
+import { config } from "../../config";
 import {
   Guardian,
   Student as IStudent,
@@ -138,6 +140,24 @@ const studentSchema = new Schema<IStudent, StudentModel>(
   },
   { timestamps: true }
 );
+
+//! pre save middleware / hook 👇
+//todo: hash password using bcryptjs
+studentSchema.pre("save", async function (next) {
+  this.password = await bcrypt.hash(
+    this.password,
+    Number(config.bcrypt_salt_round)
+  );
+  next();
+});
+
+//!  post save (after save) middleware / hook 👇
+//todo: hide password from client after it saved to DB
+// when controller send response to client, client will see password empty string
+studentSchema.post("save", async function (doc, next) {
+  doc.password = "";
+  next();
+});
 
 //todo: Creating a Mongoose custom static method
 studentSchema.statics.isStudentExists = async function (id) {
