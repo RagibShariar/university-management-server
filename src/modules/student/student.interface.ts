@@ -55,6 +55,11 @@ export type LocalGuardian = {
   relation: string;
 };
 
+//todo: creating a Mongoose custom instance methods
+// export interface StudentMethods {
+//   isStudentExists(id: string): Promise<Student | null>;
+// }
+
 //todo: Creating a Mongoose custom static methods
 export interface StudentModel extends Model<Student> {
   isStudentExists(id: string): Promise<Student | null>;

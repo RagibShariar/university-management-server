@@ -10,7 +10,7 @@ import { studentValidationSchema } from "./student.validation";
 const createStudent = async (req: Request, res: Response) => {
   try {
     const studentData = req.body;
-    const zodParsedData = studentValidationSchema.parse(studentData)
+    const zodParsedData = studentValidationSchema.parse(studentData);
     const result = await createStudentToDB(zodParsedData);
 
     res.status(200).json({
@@ -18,7 +18,7 @@ const createStudent = async (req: Request, res: Response) => {
       message: "Student created successfully",
       data: result,
     });
-  } catch (error:any) {
+  } catch (error: any) {
     res.status(500).json({
       success: false,
       message: error.message || "Something went wrong while creating student",
@@ -56,7 +56,7 @@ const getSingleStudent = async (req: Request, res: Response) => {
     res.status(500).json({
       success: false,
       message: "Something went wrong while getting a single student",
-      error: error
+      error: error,
     });
   }
 };

@@ -6,9 +6,34 @@ export default [
   {
     ignores: ["**/node_modules/**", "**/dist/**", "**/build/**"],
   },
+  {
+    plugins: {
+      "@typescript-eslint": tseslint.plugin,
+    },
+  },
   { files: ["src/**/*.{js,mjs,cjs,ts}"] },
-  { languageOptions: { globals: { ...globals.browser, ...globals.node } } },
+  {
+    languageOptions: {
+      parser: tseslint.parser,
+      parserOptions: {
+        project: true,
+      },
+      globals: {
+        ...globals.browser,
+        ...globals.node,
+      },
+    },
+  },
   pluginJs.configs.recommended,
   // ...tseslint.configs.recommended,
   ...tseslint.configs.strict,
+
+  {
+    rules: {
+      "no-unused-vars": "error",
+      "no-undef": "error",
+      "no-console": "warn",
+      "prefer-const": "error",
+    },
+  },
 ];

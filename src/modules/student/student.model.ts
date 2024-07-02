@@ -142,8 +142,10 @@ const studentSchema = new Schema<IStudent, StudentModel>(
 );
 
 //! pre save middleware / hook 👇
-//todo: hash password using bcryptjs
 studentSchema.pre("save", async function (next) {
+  // if password is not modified/updated then next();
+  if (!this.isModified("password")) return next();
+
   this.password = await bcrypt.hash(
     this.password,
     Number(config.bcrypt_salt_round)
@@ -159,8 +161,14 @@ studentSchema.post("save", async function (doc, next) {
   next();
 });
 
+//todo: Creating a Mongoose custom instance methods
+// studentSchema.methods.isStudentExists = async function (id: string) {
+//   const existingStudent = await Student.findOne(id);
+//   return existingStudent;
+// };
+
 //todo: Creating a Mongoose custom static method
-studentSchema.statics.isStudentExists = async function (id) {
+studentSchema.statics.isStudentExists = async function (id:string) {
   const existingStudent = await Student.findOne({ id: id });
   return existingStudent;
 };

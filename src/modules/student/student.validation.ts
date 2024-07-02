@@ -36,7 +36,9 @@ export const studentValidationSchema = z.object({
   id: z.string(),
   name: nameValidationSchema.required(),
   email: z.string().email().trim(),
-  password :z.string().min(6,{message:"password must be at least 6 characters or longer"}),
+  password: z
+    .string()
+    .min(6, { message: "password must be at least 6 characters or longer" }),
   gender: z.enum(["male", "female", "others"]),
   dateOfBirth: z.string(),
   contactNo: z.string().trim(),
