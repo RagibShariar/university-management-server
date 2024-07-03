@@ -30,7 +30,7 @@ export default [
 
   {
     rules: {
-      "no-unused-vars": "error",
+      "no-unused-vars": "warn",
       "no-undef": "error",
       "no-console": "warn",
       "prefer-const": "error",

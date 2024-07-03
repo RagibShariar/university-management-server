@@ -154,10 +154,28 @@ studentSchema.pre("save", async function (next) {
 });
 
 //!  post save (after save) middleware / hook 👇
-//todo: hide password from client after it saved to DB
 // when controller send response to client, client will see password empty string
 studentSchema.post("save", async function (doc, next) {
   doc.password = "";
+  next();
+});
+
+//! Query middleware / hook
+// ডেটাবেজ কুয়েরি করার আগে মডেলে কুয়েরি করবে
+studentSchema.pre("find", function (next) {
+  this.find({ isDeleted: { $ne: true } });
+  next();
+});
+studentSchema.pre("findOne", function (next) {
+  this.find({ isDeleted: { $ne: true } });
+  next();
+});
+studentSchema.pre("aggregate", function (next) {
+  this.pipeline().unshift({
+    $match: {
+      isDeleted: { $ne: true },
+    },
+  });
   next();
 });
 
@@ -168,7 +186,7 @@ studentSchema.post("save", async function (doc, next) {
 // };
 
 //todo: Creating a Mongoose custom static method
-studentSchema.statics.isStudentExists = async function (id:string) {
+studentSchema.statics.isStudentExists = async function (id: string) {
   const existingStudent = await Student.findOne({ id: id });
   return existingStudent;
 };
