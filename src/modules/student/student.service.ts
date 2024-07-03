@@ -7,7 +7,6 @@ const createStudentToDB = async (studentData: IStudent) => {
   if (await Student.isStudentExists(studentData.id)) {
     throw new Error("Student already exists!");
   }
-
   const result = await Student.create(studentData);
   return result;
 };
@@ -20,10 +19,8 @@ const getAllStudentsFromDB = async () => {
 
 // get a single student
 const getSingleStudentFromDB = async (id: string) => {
-  // const result = await Student.findOne({ id });
-  const result = await Student.aggregate([
-    { $match: { id: id } }
-  ])
+  const result = await Student.findOne({ id });
+  // const result = await Student.aggregate([{ $match: { id} }]);
   return result;
 };
 
@@ -33,9 +30,18 @@ const deleteStudentFromDB = async (id: string) => {
   return result;
 };
 
+// get deleted students from the database
+const deletedStudentsFromDB = async () => {
+  const result = await Student.find({
+    isDeleted: {$eq: true}
+  });
+  return result;
+}
+
 export {
   createStudentToDB,
   deleteStudentFromDB,
   getAllStudentsFromDB,
   getSingleStudentFromDB,
+  deletedStudentsFromDB
 };

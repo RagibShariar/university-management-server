@@ -41,7 +41,7 @@ export const studentValidationSchema = z.object({
     .min(6, { message: "password must be at least 6 characters or longer" }),
   gender: z.enum(["male", "female", "others"]),
   dateOfBirth: z.string(),
-  contactNo: z.string().trim(),
+  contactNo: z.string({ message: "Contact num is required" }).trim().min(1, {message: "Contact num is required"}),
   emergencyContactNo: z.string().trim(),
   bloodGroup: z.enum(["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"]),
   presentAddress: z.string().trim(),

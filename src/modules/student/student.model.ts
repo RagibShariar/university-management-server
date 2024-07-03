@@ -167,22 +167,22 @@ studentSchema.post("save", async function (doc, next) {
 
 //! Query middleware / hook
 // ডেটাবেজ কুয়েরি করার আগে মডেলে কুয়েরি করবে
-studentSchema.pre("find", function (next) {
-  this.find({ isDeleted: { $ne: true } });
-  next();
-});
-studentSchema.pre("findOne", function (next) {
-  this.find({ isDeleted: { $ne: true } });
-  next();
-});
-studentSchema.pre("aggregate", function (next) {
-  this.pipeline().unshift({
-    $match: {
-      isDeleted: { $ne: true },
-    },
-  });
-  next();
-});
+// studentSchema.pre("find", function (next) {
+//   this.find({ isDeleted: { $ne: true } });
+//   next();
+// });
+// studentSchema.pre("findOne", function (next) {
+//   this.find({ isDeleted: { $ne: true } });
+//   next();
+// });
+// studentSchema.pre("aggregate", function (next) {
+//   this.pipeline().unshift({
+//     $match: {
+//       isDeleted: { $ne: true },
+//     },
+//   });
+//   next();
+// });
 
 //! Mongoose Virtual
 studentSchema.virtual("fullName").get(function () {
