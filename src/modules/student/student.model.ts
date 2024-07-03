@@ -138,7 +138,12 @@ const studentSchema = new Schema<IStudent, StudentModel>(
       default: false,
     },
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+    toJSON: {
+      virtuals: true,
+    },
+  }
 );
 
 //! pre save middleware / hook 👇
@@ -177,6 +182,11 @@ studentSchema.pre("aggregate", function (next) {
     },
   });
   next();
+});
+
+//! Mongoose Virtual
+studentSchema.virtual("fullName").get(function () {
+  return `${this.name.firstName} ${this.name.middleName} ${this.name.lastName}`;
 });
 
 //todo: Creating a Mongoose custom instance methods
