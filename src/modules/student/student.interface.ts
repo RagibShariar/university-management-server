@@ -28,13 +28,13 @@ export type Student = {
   isDeleted: boolean;
 };
 
-export type Name = {
+type Name = {
   firstName: string;
   middleName: string;
   lastName: string;
 };
 
-export type Guardian = {
+type Guardian = {
   fatherName: string;
   fatherOccupation: string;
   fatherContactNo: string;
@@ -46,7 +46,7 @@ export type Guardian = {
   motherEmail?: string;
 };
 
-export type LocalGuardian = {
+type LocalGuardian = {
   name: string;
   occupation: string;
   contactNo: string;
