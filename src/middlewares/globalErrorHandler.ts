@@ -19,3 +19,7 @@ const globalErrorHandler = (
 };
 
 export default globalErrorHandler;
+
+
+// how to use?
+// return next(createError(401, 'Please login to view this page.'))

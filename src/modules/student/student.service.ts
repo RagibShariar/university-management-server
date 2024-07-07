@@ -1,15 +1,4 @@
-import { Student as IStudent } from "./student.interface";
 import { Student } from "./student.model";
-
-// create a new Student
-const createStudentToDB = async (studentData: IStudent) => {
-  //todo: Static method to check if the student is already existed
-  if (await Student.isStudentExists(studentData.id)) {
-    throw new Error("Student already exists!");
-  }
-  const result = await Student.create(studentData);
-  return result;
-};
 
 // get all students
 const getAllStudentsFromDB = async () => {
@@ -33,15 +22,14 @@ const deleteStudentFromDB = async (id: string) => {
 // get deleted students from the database
 const deletedStudentsFromDB = async () => {
   const result = await Student.find({
-    isDeleted: {$eq: true}
+    isDeleted: { $eq: true },
   });
   return result;
-}
+};
 
 export {
-  createStudentToDB,
+  deletedStudentsFromDB,
   deleteStudentFromDB,
   getAllStudentsFromDB,
   getSingleStudentFromDB,
-  deletedStudentsFromDB
 };
