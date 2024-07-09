@@ -5,7 +5,7 @@ import asyncHandler from "../../utils/asyncHandler";
 import { createStudentToDB } from "./user.service";
 
 // Create a new student
-const createStudent = asyncHandler(async (req: Request, res: Response) => {
+const createStudent = asyncHandler(async (req, res) => {
   const { password, student: studentData } = req.body;
   // const zodParsedData = studentValidationSchema.parse(studentData);
 

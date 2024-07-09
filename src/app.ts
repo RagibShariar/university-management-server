@@ -4,6 +4,7 @@ import globalErrorHandler from "./middlewares/globalErrorHandler";
 import studentRouter from "./modules/student/student.route";
 import userRouter from "./modules/user/user.route";
 import notFound from "./middlewares/notFound";
+import academicSemesterRouter from "./modules/academicSemester/academicSemester.route";
 
 const app = express();
 
@@ -18,6 +19,7 @@ app.get("/", (req: Request, res: Response) => {
 // Application Routes
 app.use("/api/v1/users", userRouter)
 app.use("/api/v1/students", studentRouter);
+app.use("/api/v1/academic-semesters", academicSemesterRouter)
 
 //global error handler
 app.use(globalErrorHandler);
