@@ -14,7 +14,7 @@ const globalErrorHandler = (
     success: false,
     status: statusCode,
     message: err.message,
-    errorStack: config.env === "development" ? err.stack : "",
+    errorStack: config.node_env === "development" ? err.stack : "",
   });
 };
 

@@ -1,7 +1,8 @@
-import { Model } from "mongoose";
+import { Model, Types } from "mongoose";
 
-export type Student = {
+export type IStudent = {
   id: string;
+  user: Types.ObjectId; // reference to the user object
   name: Name;
   email: string;
   password: string;
@@ -24,17 +25,16 @@ export type Student = {
   guardian: Guardian;
   localGuardian: LocalGuardian;
   image?: string;
-  isActive: "active" | "blocked";
   isDeleted: boolean;
 };
 
-type Name = {
+export type Name = {
   firstName: string;
   middleName: string;
   lastName: string;
 };
 
-type Guardian = {
+export type Guardian = {
   fatherName: string;
   fatherOccupation: string;
   fatherContactNo: string;
@@ -46,7 +46,7 @@ type Guardian = {
   motherEmail?: string;
 };
 
-type LocalGuardian = {
+export type LocalGuardian = {
   name: string;
   occupation: string;
   contactNo: string;

@@ -1,8 +1,8 @@
-import { Student as IStudent } from "../student/student.interface";
+import { config } from "../../config";
+import { IStudent } from "../student/student.interface";
 import { Student } from "../student/student.model";
 import { IUser } from "./user.interface";
 import { User } from "./user.model";
-
 
 // create a new Student
 const createStudentToDB = async (password: string, studentData: IStudent) => {
@@ -11,29 +11,29 @@ const createStudentToDB = async (password: string, studentData: IStudent) => {
   //   throw new Error("Student already exists!");
   // }
 
-  // create a user oject
+  //* create a user oject
+  const user: Partial<IUser> = {};
 
-  // if password is not given, set default password 
+  //* set role as student
+  user.role = "student";
 
-  // set role as student
-  
-  // set generated student id
+  //* if password is not given, then set default password
+  user.password = password || config.default_password;
 
-  // create a user 
+  //* set generated student id
+  user.id = "2024010001";
 
-  // create a student
+  //* create a user into DB
+  const newUser = await User.create(user);
 
+  //* create a student into DB
+  if (Object.keys(newUser).length) {
+    studentData.id = newUser.id;
+    studentData.user = newUser._id; // reference id
 
-
-
-
-
-
-
+    const result = await Student.create(studentData);
+    return result;
+  }
 };
 
-
-
-export {
-  createStudentToDB
-}
+export { createStudentToDB };

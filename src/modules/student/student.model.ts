@@ -1,9 +1,8 @@
-import bcrypt from "bcryptjs";
 import mongoose, { Schema } from "mongoose";
-import { config } from "../../config";
+
 import {
   Guardian,
-  Student as IStudent,
+  IStudent,
   LocalGuardian,
   Name,
   StudentModel,
@@ -47,6 +46,12 @@ const studentSchema = new Schema<IStudent, StudentModel>(
       unique: true,
       trim: true,
     },
+    user: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+      unique: true,
+    },
     name: {
       type: nameSchema,
       required: [true, "Name is required"],
@@ -57,11 +62,7 @@ const studentSchema = new Schema<IStudent, StudentModel>(
       unique: true,
       trim: true,
     },
-    password: {
-      type: String,
-      minlength: [6, "password must be at least 6 characters or longer"],
-      required: [true, "Password is required"],
-    },
+
     gender: {
       type: String,
       enum: {
@@ -128,11 +129,6 @@ const studentSchema = new Schema<IStudent, StudentModel>(
       required: [true, "Local guardian information is required"],
     },
     image: { type: String, trim: true },
-    isActive: {
-      type: String,
-      enum: ["active", "blocked"],
-      default: "active",
-    },
     isDeleted: {
       type: Boolean,
       default: false,
@@ -145,25 +141,6 @@ const studentSchema = new Schema<IStudent, StudentModel>(
     },
   }
 );
-
-//! pre save middleware / hook 👇
-studentSchema.pre("save", async function (next) {
-  // if password is not modified/updated then next();
-  if (!this.isModified("password")) return next();
-
-  this.password = await bcrypt.hash(
-    this.password,
-    Number(config.bcrypt_salt_round)
-  );
-  next();
-});
-
-//!  post save (after save) middleware / hook 👇
-// when controller send response to client, client will see password empty string
-studentSchema.post("save", async function (doc, next) {
-  doc.password = "";
-  next();
-});
 
 //! Query middleware / hook
 // ডেটাবেজ কুয়েরি করার আগে মডেলে কুয়েরি করবে

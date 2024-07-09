@@ -1,6 +1,5 @@
 import { Router } from "express";
 import {
-  createStudent,
   deletedStudents,
   deleteStudent,
   getAllStudents,
@@ -10,7 +9,7 @@ import {
 const studentRouter = Router();
 
 // Routes
-studentRouter.post("/create-student", createStudent);
+// studentRouter.post("/create-student", createStudent);
 studentRouter.get("/", getAllStudents);
 studentRouter.get("/bin", deletedStudents)
 studentRouter.get("/:studentId", getSingleStudent);
