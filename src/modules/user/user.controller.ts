@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import httpStatus from "http-status";
 import ApiResponse from "../../utils/ApiResponse";
-import { asyncHandler } from "../../utils/asyncHandler";
+import asyncHandler from "../../utils/asyncHandler";
 import { createStudentToDB } from "./user.service";
 
 // Create a new student

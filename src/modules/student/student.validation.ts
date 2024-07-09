@@ -33,12 +33,14 @@ const localGuardianValidationSchema = z.object({
 
 //! Student Zod Validation
 export const studentValidationSchema = z.object({
-  id: z.string(),
-  name: nameValidationSchema.required(),
-  email: z.string().email().trim(),
+  // body: z.object({
+
   password: z
     .string()
     .min(6, { message: "password must be at least 6 characters or longer" }),
+  student: z.object({
+    name: nameValidationSchema,
+  email: z.string().email().trim(),
   gender: z.enum(["male", "female", "others"]),
   dateOfBirth: z.string(),
   contactNo: z.string({ message: "Contact num is required" }).trim().min(1, {message: "Contact num is required"}),
@@ -59,5 +61,6 @@ export const studentValidationSchema = z.object({
   guardian: guardianValidationSchema.required(),
   localGuardian: localGuardianValidationSchema.required(),
   image: z.string().trim().optional(),
-  isDeleted: z.boolean().default(false),
-});
+  })
+})
+// });
