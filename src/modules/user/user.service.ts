@@ -21,7 +21,7 @@ const createStudentToDB = async (password: string, studentData: IStudent) => {
   user.password = password || config.default_password;
 
   //* set generated student id
-  user.id = "2024010001";
+  user.id = "2024010004";
 
   //* create a user into DB
   const newUser = await User.create(user);

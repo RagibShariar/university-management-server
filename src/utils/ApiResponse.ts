@@ -8,14 +8,13 @@ const ApiResponse = <T>(
 ): Response => {
   return res.status(statusCode).json({
     success: true,
-    statusCode: statusCode >= 200 && statusCode < 400,
+    statusCode: statusCode || 200,
     message: message,
     data: data,
   });
 };
 
 export default ApiResponse;
-
 
 // how to use?
 // ApiResponse(res, 200, 'Student retrieved successfully', result);
