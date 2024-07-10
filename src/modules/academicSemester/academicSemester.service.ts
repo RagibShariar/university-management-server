@@ -1,6 +1,7 @@
 import { IAcademicSemester } from "./academicSemester.interface";
 import { AcademicSemester } from "./academicSemester.model";
 
+// Create a new academic semester
 const createAcademicSemesterToDb = async (payload: IAcademicSemester) => {
   const academicSemesterCodeMapper = {
     Spring: "01",
@@ -19,4 +20,10 @@ const createAcademicSemesterToDb = async (payload: IAcademicSemester) => {
   return result;
 };
 
-export { createAcademicSemesterToDb };
+//  Get all academic semesters
+const getAllAcademicSemestersFromDB = async () => {
+  const result = await AcademicSemester.find();
+  return result;
+};
+
+export { createAcademicSemesterToDb, getAllAcademicSemestersFromDB };
