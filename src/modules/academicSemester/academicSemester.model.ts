@@ -54,7 +54,7 @@ const academicSemesterSchema = new Schema<IAcademicSemester>(
   { timestamps: true }
 );
 
-// pre hook middleware
+// pre hook middleware 
 academicSemesterSchema.pre("save", async function (next) {
   const isSemesterExists = await AcademicSemester.findOne({
     name: this.name,
