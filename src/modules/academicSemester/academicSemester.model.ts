@@ -5,6 +5,8 @@ import {
   ISemesterCode,
   ISemesterName,
 } from "./academicSemester.interface";
+import ApiError from "../../utils/ApiError";
+import httpStatus from "http-status";
 
 const months: IMonths[] = [
   "January",
@@ -61,7 +63,7 @@ academicSemesterSchema.pre("save", async function (next) {
     year: this.year,
   });
   if (isSemesterExists) {
-    throw new Error("Semester already exists");
+    throw new ApiError(httpStatus.BAD_REQUEST,"Semester already exists");
   }
   next();
 });

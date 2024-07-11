@@ -1,3 +1,5 @@
+import httpStatus from "http-status";
+import ApiError from "../../utils/ApiError";
 import { IAcademicSemester } from "./academicSemester.interface";
 import { AcademicSemester } from "./academicSemester.model";
 
@@ -10,7 +12,7 @@ const academicSemesterCodeMapper = {
 // Create a new academic semester
 const createAcademicSemesterToDb = async (payload: IAcademicSemester) => {
   if (academicSemesterCodeMapper[payload.name] !== payload.code) {
-    throw new Error(
+    throw new ApiError( httpStatus.BAD_REQUEST,
       `Invalid semester code. ${payload.name} code is ${
         academicSemesterCodeMapper[payload.name]
       }`
@@ -43,7 +45,7 @@ const updateAcademicSemesterIntoDb = async (
     payload.code &&
     academicSemesterCodeMapper[payload.name] !== payload.code
   ) {
-    throw new Error("Invalid semester code");
+    throw new ApiError(httpStatus.BAD_REQUEST,"Invalid semester code");
   }
 
   const result = await AcademicSemester.findByIdAndUpdate(
