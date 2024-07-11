@@ -5,6 +5,7 @@ import {
   createAcademicFacultyToDb,
   getAllAcademicFacultiesFromDB,
   getSingleAcademicFacultyFromDb,
+  updateAcademicFacultyToDb,
 } from "./academicFaculty.service";
 
 // Create a new academic faculty
@@ -42,8 +43,21 @@ const getSingleAcademicFaculty = asyncHandler(async (req, res) => {
   );
 });
 
+// Update a single academic faculty
+const updateAcademicFaculty = asyncHandler(async (req, res) => {
+  const { academicFacultyId } = req.params;
+  const result = await updateAcademicFacultyToDb(academicFacultyId, req.body);
+  ApiResponse(
+    res,
+    httpStatus.OK,
+    "Academic faculty is updated successfully",
+    result
+  );
+});
+
 export {
   createAcademicFaculty,
   getAllAcademicFaculties,
   getSingleAcademicFaculty,
+  updateAcademicFaculty,
 };

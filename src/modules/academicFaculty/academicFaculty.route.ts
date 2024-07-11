@@ -4,6 +4,7 @@ import {
   createAcademicFaculty,
   getAllAcademicFaculties,
   getSingleAcademicFaculty,
+  updateAcademicFaculty,
 } from "./academicFaculty.controller";
 import { academicFacultyValidationSchema } from "./academicFaculty.validation";
 
@@ -17,4 +18,9 @@ academicFacultyRouter.post(
 
 academicFacultyRouter.get("/", getAllAcademicFaculties);
 academicFacultyRouter.get("/:academicFacultyId", getSingleAcademicFaculty);
+academicFacultyRouter.patch(
+  "/:academicFacultyId",
+  validateRequest(academicFacultyValidationSchema),
+  updateAcademicFaculty
+);
 export default academicFacultyRouter;
