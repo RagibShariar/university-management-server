@@ -1,9 +1,11 @@
 import { config } from "../../config";
 import { IAcademicSemester } from "../academicSemester/academicSemester.interface";
+import { AcademicSemester } from "../academicSemester/academicSemester.model";
 import { IStudent } from "../student/student.interface";
 import { Student } from "../student/student.model";
 import { IUser } from "./user.interface";
 import { User } from "./user.model";
+import { generateStudentId } from "./user.utils";
 
 // create a new Student
 const createStudentToDB = async (password: string, studentData: IStudent) => {
@@ -21,17 +23,13 @@ const createStudentToDB = async (password: string, studentData: IStudent) => {
   //* if password is not given, then set default password
   user.password = password || config.default_password;
 
+  //* find academic semester
+  const admissionSemester = (await AcademicSemester.findById(
+    studentData.admissionSemester
+  )) as IAcademicSemester;
+
   //* set generated student id
-
-  const generateStudentId = (payload: IAcademicSemester) => {
-    
-  }
-
-
-
-
-
-  user.id = "2024010011";
+  user.id = await generateStudentId(admissionSemester);
 
   //* create a user into DB
   const newUser = await User.create(user);
