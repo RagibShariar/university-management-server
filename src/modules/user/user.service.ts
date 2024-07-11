@@ -1,4 +1,5 @@
 import { config } from "../../config";
+import { IAcademicSemester } from "../academicSemester/academicSemester.interface";
 import { IStudent } from "../student/student.interface";
 import { Student } from "../student/student.model";
 import { IUser } from "./user.interface";
@@ -21,6 +22,15 @@ const createStudentToDB = async (password: string, studentData: IStudent) => {
   user.password = password || config.default_password;
 
   //* set generated student id
+
+  const generateStudentId = (payload: IAcademicSemester) => {
+    
+  }
+
+
+
+
+
   user.id = "2024010011";
 
   //* create a user into DB

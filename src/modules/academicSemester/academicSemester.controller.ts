@@ -4,6 +4,7 @@ import asyncHandler from "../../utils/asyncHandler";
 import {
   createAcademicSemesterToDb,
   getAllAcademicSemestersFromDB,
+  getSingleAcademicSemesterFromDb,
 } from "./academicSemester.service";
 
 // Create a new academic semester
@@ -16,11 +17,26 @@ const createAcademicSemester = asyncHandler(async (req, res) => {
 // Get all academic semesters
 const getAllAcademicSemesters = asyncHandler(async (req, res) => {
   const result = await getAllAcademicSemestersFromDB();
-  ApiResponse(res, httpStatus.OK, "Semesters retrieved successfully", result);
+  ApiResponse(
+    res,
+    httpStatus.OK,
+    "Semesters are retrieved successfully",
+    result
+  );
 });
 
 // Get a single academic semester
+const getSingleAcademicSemester = asyncHandler(async (req, res) => {
+  const { semesterId } = req.params;
+  const result = await getSingleAcademicSemesterFromDb(semesterId);
+
+  ApiResponse(res, httpStatus.OK, "Semester retrieved successfully", result);
+});
 
 // Update a single academic semester
 
-export { createAcademicSemester, getAllAcademicSemesters };
+export {
+  createAcademicSemester,
+  getAllAcademicSemesters,
+  getSingleAcademicSemester,
+};

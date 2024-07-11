@@ -60,7 +60,8 @@ export const studentValidationSchema = z.object({
   ]),
   guardian: guardianValidationSchema.required(),
   localGuardian: localGuardianValidationSchema.required(),
-  image: z.string().trim().optional(),
+    image: z.string().trim().optional(),
+  admissionSemester: z.string(),
   })
 })
 // });
