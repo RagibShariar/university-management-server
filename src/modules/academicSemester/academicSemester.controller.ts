@@ -5,6 +5,7 @@ import {
   createAcademicSemesterToDb,
   getAllAcademicSemestersFromDB,
   getSingleAcademicSemesterFromDb,
+  updateAcademicSemesterIntoDb,
 } from "./academicSemester.service";
 
 // Create a new academic semester
@@ -34,9 +35,16 @@ const getSingleAcademicSemester = asyncHandler(async (req, res) => {
 });
 
 // Update a single academic semester
+const updateSingleAcademicSemester = asyncHandler(async (req, res) => {
+  const { semesterId } = req.params;
+  const result = await updateAcademicSemesterIntoDb(semesterId, req.body);
+
+  ApiResponse(res, httpStatus.OK, "Semester updated successfully", result);
+});
 
 export {
   createAcademicSemester,
   getAllAcademicSemesters,
   getSingleAcademicSemester,
+  updateSingleAcademicSemester,
 };
