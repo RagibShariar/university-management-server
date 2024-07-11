@@ -25,8 +25,9 @@ export type IStudent = {
   guardian: Guardian;
   localGuardian: LocalGuardian;
   image?: string;
-  admissionSemester: Types.ObjectId; 
   isDeleted: boolean;
+  admissionSemester: Types.ObjectId;
+  academicDepartment: Types.ObjectId;
 };
 
 export type Name = {

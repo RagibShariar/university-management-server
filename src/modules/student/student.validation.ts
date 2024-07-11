@@ -40,28 +40,32 @@ export const studentValidationSchema = z.object({
     .min(6, { message: "password must be at least 6 characters or longer" }),
   student: z.object({
     name: nameValidationSchema,
-  email: z.string().email().trim(),
-  gender: z.enum(["male", "female", "others"]),
-  dateOfBirth: z.string(),
-  contactNo: z.string({ message: "Contact num is required" }).trim().min(1, {message: "Contact num is required"}),
-  emergencyContactNo: z.string().trim(),
-  bloodGroup: z.enum(["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"]),
-  presentAddress: z.string().trim(),
-  permanentAddress: z.string().trim(),
-  nationality: z.string().trim(),
-  religion: z.string().trim(),
-  maritalStatus: z.enum([
-    "Single",
-    "Married",
-    "Divorced",
-    "Widowed",
-    "Separated",
-    "Partnered",
-  ]),
-  guardian: guardianValidationSchema.required(),
-  localGuardian: localGuardianValidationSchema.required(),
+    email: z.string().email().trim(),
+    gender: z.enum(["male", "female", "others"]),
+    dateOfBirth: z.string(),
+    contactNo: z
+      .string({ message: "Contact num is required" })
+      .trim()
+      .min(1, { message: "Contact num is required" }),
+    emergencyContactNo: z.string().trim(),
+    bloodGroup: z.enum(["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"]),
+    presentAddress: z.string().trim(),
+    permanentAddress: z.string().trim(),
+    nationality: z.string().trim(),
+    religion: z.string().trim(),
+    maritalStatus: z.enum([
+      "Single",
+      "Married",
+      "Divorced",
+      "Widowed",
+      "Separated",
+      "Partnered",
+    ]),
+    guardian: guardianValidationSchema.required(),
+    localGuardian: localGuardianValidationSchema.required(),
     image: z.string().trim().optional(),
-  admissionSemester: z.string(),
-  })
-})
+    admissionSemester: z.string(),
+    academicDepartment: z.string(),
+  }),
+});
 // });

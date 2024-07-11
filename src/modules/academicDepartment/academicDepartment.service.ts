@@ -9,7 +9,8 @@ const createAcademicDepartmentToDb = async (payload: IAcademicDepartment) => {
 
 // get all academic departments
 const getAllAcademicDepartmentsFromDb = async () => {
-  const result = await AcademicDepartment.find();
+  const result = await AcademicDepartment.find()
+    .populate("academicFaculty");
   return result;
 };
 
