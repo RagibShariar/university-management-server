@@ -1,6 +1,10 @@
 import { Router } from "express";
 import validateRequest from "../../middlewares/validateRequest";
-import { createAcademicFaculty } from "./academicFaculty.controller";
+import {
+  createAcademicFaculty,
+  getAllAcademicFaculties,
+  getSingleAcademicFaculty,
+} from "./academicFaculty.controller";
 import { academicFacultyValidationSchema } from "./academicFaculty.validation";
 
 const academicFacultyRouter = Router();
@@ -11,4 +15,6 @@ academicFacultyRouter.post(
   createAcademicFaculty
 );
 
+academicFacultyRouter.get("/", getAllAcademicFaculties);
+academicFacultyRouter.get("/:academicFacultyId", getSingleAcademicFaculty);
 export default academicFacultyRouter;
