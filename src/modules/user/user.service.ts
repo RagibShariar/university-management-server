@@ -1,4 +1,7 @@
+import httpStatus from "http-status";
+import mongoose from "mongoose";
 import { config } from "../../config";
+import ApiError from "../../utils/ApiError";
 import { IAcademicSemester } from "../academicSemester/academicSemester.interface";
 import { AcademicSemester } from "../academicSemester/academicSemester.model";
 import { IStudent } from "../student/student.interface";
@@ -7,7 +10,7 @@ import { IUser } from "./user.interface";
 import { User } from "./user.model";
 import { generateStudentId } from "./user.utils";
 
-// create a new Student
+// create a new Student - using transaction and rollback
 const createStudentToDB = async (password: string, studentData: IStudent) => {
   //todo: Static method to check if the student is already existed
   // if (await Student.isStudentExists(studentData.id)) {
@@ -28,19 +31,36 @@ const createStudentToDB = async (password: string, studentData: IStudent) => {
     studentData.admissionSemester
   )) as IAcademicSemester;
 
-  //* set generated student id
-  user.id = await generateStudentId(admissionSemester);
+  const session = await mongoose.startSession();
+  try {
+    session.startTransaction(); // session start
 
-  //* create a user into DB
-  const newUser = await User.create(user);
+    //* set generated student id
+    user.id = await generateStudentId(admissionSemester);
 
-  //* create a student into DB
-  if (Object.keys(newUser).length) {
-    studentData.id = newUser.id;
-    studentData.user = newUser._id; // reference id
+    //* create a user into DB -- transaction - 1
+    // pass array of user object
+    const newUser = await User.create([user], { session });
+    if (!newUser.length) {
+      throw new ApiError(httpStatus.BAD_REQUEST, "Failed to create user");
+    }
 
-    const result = await Student.create(studentData);
+    studentData.id = newUser[0].id; // newUser is array
+    studentData.user = newUser[0]._id; // reference id
+
+    //* create a student into DB -- transaction - 2
+    const result = await Student.create([studentData], { session });
+    if (!result.length) {
+      throw new ApiError(httpStatus.BAD_REQUEST, "Failed to create student");
+    }
+
+    await session.commitTransaction(); // session commit
+    await session.endSession(); // session end
     return result;
+  } catch (error) {
+    await session.abortTransaction(); // session abort
+    await session.endSession(); // session end
+    throw error;
   }
 };
 
