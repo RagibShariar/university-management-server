@@ -2,6 +2,7 @@ import httpStatus from "http-status";
 import mongoose from "mongoose";
 import ApiError from "../../utils/ApiError";
 import { User } from "../user/user.model";
+import { IStudent } from "./student.interface";
 import { Student } from "./student.model";
 
 // get all students
@@ -19,7 +20,7 @@ const getAllStudentsFromDB = async () => {
 
 // get a single student
 const getSingleStudentFromDB = async (id: string) => {
-  const result = await Student.findOne({ id })
+  const result = await Student.findOne({ id: id })
     .populate("admissionSemester")
     .populate({
       path: "academicDepartment",
@@ -28,6 +29,14 @@ const getSingleStudentFromDB = async (id: string) => {
       },
     });
   // const result = await Student.aggregate([{ $match: { id} }]);
+  return result;
+};
+
+// update a single student
+const updateStudentToDb = async (id: string, data: Partial<IStudent>) => {
+  const result = await Student.findOneAndUpdate({ id: id }, data, {
+    new: true,
+  });
   return result;
 };
 
@@ -73,7 +82,7 @@ const deleteStudentFromDB = async (id: string) => {
   } catch (error) {
     await session.abortTransaction();
     await session.endSession();
-    throw error;
+    throw new Error("Something went wrong while deleting a student");
   }
 };
 
@@ -90,4 +99,5 @@ export {
   deleteStudentFromDB,
   getAllStudentsFromDB,
   getSingleStudentFromDB,
+  updateStudentToDb,
 };

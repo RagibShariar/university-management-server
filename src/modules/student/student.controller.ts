@@ -1,11 +1,13 @@
 import { NextFunction, Request, Response } from "express";
 import createHttpError from "http-errors";
 import ApiResponse from "../../utils/ApiResponse";
+import asyncHandler from "../../utils/asyncHandler";
 import {
   deletedStudentsFromDB,
   deleteStudentFromDB,
   getAllStudentsFromDB,
   getSingleStudentFromDB,
+  updateStudentToDb,
 } from "./student.service";
 
 // get all students
@@ -57,6 +59,15 @@ const getSingleStudent = async (
   }
 };
 
+// update a single student
+const updateStudent = asyncHandler(async (req, res) => {
+  const { studentId } = req.params;
+  const { student } = req.body;
+  const result = await updateStudentToDb(studentId, student);
+
+  ApiResponse(res, 200, "Student updated successfully", result);
+});
+
 // Delete a single student
 const deleteStudent = async (req: Request, res: Response) => {
   try {
@@ -94,4 +105,10 @@ const deletedStudents = async (req: Request, res: Response) => {
   }
 };
 
-export { deletedStudents, deleteStudent, getAllStudents, getSingleStudent };
+export {
+  deletedStudents,
+  deleteStudent,
+  getAllStudents,
+  getSingleStudent,
+  updateStudent,
+};
