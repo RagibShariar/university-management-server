@@ -1,21 +1,41 @@
-import { NextFunction, Request, Response } from "express";
-import { HttpError } from "http-errors";
+/* eslint-disable no-unused-vars */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { ErrorRequestHandler } from "express";
 import httpStatus from "http-status";
+import { ZodError } from "zod";
 import { config } from "../config";
+import handleValidationError from "../errors/handleValidationError";
+import handleZodError from "../errors/handleZodError";
+import { IErrorSource } from "../interface/error";
 
-const globalErrorHandler = (
-  err: HttpError,
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  const statusCode = err.statusCode || httpStatus.INTERNAL_SERVER_ERROR;
+const globalErrorHandler: ErrorRequestHandler = (err, req, res) => {
+  let statusCode = err.statusCode || httpStatus.INTERNAL_SERVER_ERROR;
+  let message = "Something went wrong";
+  let errorSource: IErrorSource = [
+    {
+      path: "",
+      message: "Something went wrong",
+    },
+  ];
 
+  if (err instanceof ZodError) {
+    const simplifiedError = handleZodError(err);
+    statusCode = simplifiedError?.statusCode;
+    message = simplifiedError?.message;
+    errorSource = simplifiedError?.errorSource;
+  } else if (err?.name === "ValidationError") {
+    const simplifiedError = handleValidationError(err);
+    statusCode = simplifiedError?.statusCode;
+    message = simplifiedError?.message;
+    errorSource = simplifiedError?.errorSource;
+  }
+
+  //?ultimate return
   return res.status(statusCode).json({
     success: false,
-    status: statusCode,
-    message: err.message || "Something went wrong",
-    errorStack: config.node_env === "development" ? err : "",
+    message: err.message,
+    errorSource,
+    errorStack: config.node_env === "development" ? err?.stack : null,
   });
 };
 
