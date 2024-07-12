@@ -32,9 +32,30 @@ const getSingleStudentFromDB = async (id: string) => {
   return result;
 };
 
-// update a single student
-const updateStudentToDb = async (id: string, data: Partial<IStudent>) => {
-  const result = await Student.findOneAndUpdate({ id: id }, data, {
+// update a single student - primitive and non primitive fields together
+const updateStudentToDb = async (id: string, payload: Partial<IStudent>) => {
+  // destructure non primitive fields
+  const { name, guardian, localGuardian, ...remainingPayload } = payload;
+  const updatedData: Record<string, unknown> = { ...remainingPayload };
+
+  // for updating non primitive fields
+  if (name && Object.keys(name).length) {
+    for (const [key, value] of Object.entries(name)) {
+      updatedData[`name.${key}`] = value;
+    }
+  }
+  if (guardian && Object.keys(guardian).length) {
+    for (const [key, value] of Object.entries(guardian)) {
+      updatedData[`guardian.${key}`] = value;
+    }
+  }
+  if (localGuardian && Object.keys(localGuardian).length) {
+    for (const [key, value] of Object.entries(localGuardian)) {
+      updatedData[`localGuardian.${key}`] = value;
+    }
+  }
+
+  const result = await Student.findOneAndUpdate({ id: id }, updatedData, {
     new: true,
   });
   return result;
