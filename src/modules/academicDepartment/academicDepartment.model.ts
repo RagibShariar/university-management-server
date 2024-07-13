@@ -1,7 +1,7 @@
+import httpStatus from "http-status";
 import mongoose, { Schema } from "mongoose";
 import ApiError from "../../utils/ApiError";
 import { IAcademicDepartment } from "./academicDepartment.interface";
-import httpStatus from "http-status";
 
 const academicDepartmentSchema = new Schema<IAcademicDepartment>(
   {

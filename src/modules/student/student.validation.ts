@@ -45,7 +45,10 @@ export const createStudentValidationSchema = z.object({
     gender: z.enum(["male", "female", "others"]),
     dateOfBirth: z.string(),
     contactNo: z
-      .string({ message: "Contact num is required" })
+      .string({
+        required_error: "Contact num is required",
+        invalid_type_error: "Contact No must be a string",
+       })
       .trim()
       .min(1, { message: "Contact num is required" }),
     emergencyContactNo: z.string().trim(),

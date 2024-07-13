@@ -1,10 +1,4 @@
-export type IErrorSource = {
+export type IErrorSource = Array<{
   path: string | number;
   message: string;
-}[];
-
-export type IGenericErrorResponse = {
-  statusCode: number;
-  message: string;
-  errorSource: IErrorSource;
-};
+}>;

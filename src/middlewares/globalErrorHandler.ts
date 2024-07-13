@@ -1,41 +1,89 @@
 /* eslint-disable no-unused-vars */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { ErrorRequestHandler } from "express";
 import httpStatus from "http-status";
+import mongoose from "mongoose";
 import { ZodError } from "zod";
 import { config } from "../config";
-import handleValidationError from "../errors/handleValidationError";
-import handleZodError from "../errors/handleZodError";
 import { IErrorSource } from "../interface/error";
+import ApiError from "../utils/ApiError";
 
-const globalErrorHandler: ErrorRequestHandler = (err, req, res) => {
-  let statusCode = err.statusCode || httpStatus.INTERNAL_SERVER_ERROR;
-  let message = "Something went wrong";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
+  let statusCode = 500;
+  let message = "Something went wrong!";
   let errorSource: IErrorSource = [
     {
       path: "",
-      message: "Something went wrong",
+      message: "",
     },
   ];
 
   if (err instanceof ZodError) {
-    const simplifiedError = handleZodError(err);
-    statusCode = simplifiedError?.statusCode;
-    message = simplifiedError?.message;
-    errorSource = simplifiedError?.errorSource;
+    statusCode = httpStatus.BAD_REQUEST;
+    message = "Zod validation error";
+    errorSource = err?.issues?.map((issue) => {
+      return {
+        path: issue?.path[issue.path.length - 1],
+        message: issue.message,
+      };
+    });
   } else if (err?.name === "ValidationError") {
-    const simplifiedError = handleValidationError(err);
-    statusCode = simplifiedError?.statusCode;
-    message = simplifiedError?.message;
-    errorSource = simplifiedError?.errorSource;
+    statusCode = httpStatus.BAD_REQUEST;
+    message = "Mongoose Validation error";
+    errorSource = Object.values(err?.errors).map((val) => {
+      const error = val as
+        | mongoose.Error.ValidatorError
+        | mongoose.Error.CastError;
+      return {
+        path: error?.path,
+        message: error?.message,
+      };
+    });
+  } else if (err?.name === "CastError") {
+    const error = err as mongoose.Error.CastError;
+    statusCode = httpStatus.BAD_REQUEST;
+    message = " Invalid id, Cast Error";
+    errorSource = [
+      {
+        path: error?.path,
+        message: error?.message,
+      },
+    ];
+  } else if (err?.code === 11000) {
+    statusCode = httpStatus.CONFLICT;
+    message = "Duplicate entry error";
+    errorSource = [
+      {
+        path: err?.keyValue?.name,
+        message: `${err?.keyValue.name} is already exists`,
+      },
+    ];
+  } else if (err instanceof ApiError) {
+    statusCode = err?.statusCode;
+    message = err?.message;
+    errorSource = [
+      {
+        path: "",
+        message: err?.message,
+      },
+    ];
+  } else if (err instanceof Error) {
+    message = err?.message;
+    errorSource = [
+      {
+        path: "",
+        message: err?.message,
+      },
+    ];
   }
 
   //?ultimate return
   return res.status(statusCode).json({
     success: false,
-    message: err.message,
+    message,
     errorSource,
-    errorStack: config.node_env === "development" ? err?.stack : null,
+    myError: err,
+    errorStack: config.node_env === "development" ? err?.stack : "",
   });
 };
 

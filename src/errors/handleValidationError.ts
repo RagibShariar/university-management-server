@@ -5,17 +5,17 @@ const handleValidationError = (
   err: mongoose.Error.ValidationError
 ): IGenericErrorResponse => {
   const errorSource: IErrorSource = Object.values(err.errors).map(
-    (el: mongoose.Error.ValidatorError | mongoose.Error.CastError) => {
+    (val: mongoose.Error.ValidatorError | mongoose.Error.CastError) => {
       return {
-        path: el?.path,
-        message: el?.message,
+        path: val?.path,
+        message: val?.message,
       };
     }
   );
   const statusCode = 400;
   return {
     statusCode,
-    message: "Validation Error",
+    message: "Mongoose Validation Error",
     errorSource,
   };
 };
