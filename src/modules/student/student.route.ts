@@ -15,12 +15,12 @@ const studentRouter = Router();
 // studentRouter.post("/create-student", createStudent);
 studentRouter.get("/", getAllStudents);
 studentRouter.get("/bin", deletedStudents);
-studentRouter.get("/:studentId", getSingleStudent);
+studentRouter.get("/:id", getSingleStudent);
 studentRouter.patch(
-  "/:studentId",
+  "/:id",
   validateRequest(updateStudentValidationSchema),
   updateStudent
 );
-studentRouter.delete("/:studentId", deleteStudent);
+studentRouter.delete("/:id", deleteStudent);
 
 export default studentRouter;

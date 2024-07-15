@@ -100,10 +100,6 @@ const facultySchema = new Schema<IFaculty>(
       type: Schema.Types.ObjectId,
       ref: "AcademicDepartment",
     },
-    academicFaculty: {
-      type: Schema.Types.ObjectId,
-      ref: "academicFaculty",
-    },
     isDeleted: {
       type: Boolean,
       default: false,

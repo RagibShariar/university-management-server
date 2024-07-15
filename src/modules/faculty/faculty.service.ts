@@ -7,14 +7,8 @@ import { Faculty } from "./faculty.model";
 
 // get all faculties
 const getAllFacultiesFromDB = async () => {
-  const result = await Faculty.find();
-  // .populate("academicFaculty")
-  // .populate({
-  //   path: "academicDepartment",
-  //   populate: {
-  //     path: "academicFaculty", // nested populate
-  //   },
-  // });
+  const result = await Faculty.find()
+  .populate("academicDepartment")
   return result;
 };
 
@@ -38,8 +32,9 @@ const updateFacultyToDb = async (id: string, payload: Partial<IFaculty>) => {
     }
   }
 
-  const result = await Faculty.findOneAndUpdate({ id: id }, updatedData, {
+  const result = await Faculty.findByIdAndUpdate({ id: id }, updatedData, {
     new: true,
+    runValidators: true,
   });
   return result;
 };

@@ -47,7 +47,6 @@ export const createFacultyValidationSchema = z.object({
     ]),
     image: z.string().trim().optional(),
     academicDepartment: z.string(),
-    academicFaculty: z.string(),
   }),
 });
 // });

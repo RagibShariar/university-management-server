@@ -35,8 +35,8 @@ const getSingleStudent = async (
   next: NextFunction
 ) => {
   try {
-    const { studentId } = req.params;
-    const result = await getSingleStudentFromDB(studentId);
+    const { id } = req.params;
+    const result = await getSingleStudentFromDB(id);
 
     // res.status(200).json({
     //   success: true,
@@ -61,9 +61,9 @@ const getSingleStudent = async (
 
 // update a single student
 const updateStudent = asyncHandler(async (req, res) => {
-  const { studentId } = req.params;
+  const { id } = req.params;
   const { student } = req.body;
-  const result = await updateStudentToDb(studentId, student);
+  const result = await updateStudentToDb(id, student);
 
   ApiResponse(res, 200, "Student updated successfully", result);
 });
@@ -71,8 +71,8 @@ const updateStudent = asyncHandler(async (req, res) => {
 // Delete a single student
 const deleteStudent = async (req: Request, res: Response) => {
   try {
-    const { studentId } = req.params;
-    const result = await deleteStudentFromDB(studentId);
+    const { id } = req.params;
+    const result = await deleteStudentFromDB(id);
 
     res.status(200).json({
       success: true,
@@ -90,18 +90,20 @@ const deleteStudent = async (req: Request, res: Response) => {
 };
 
 // get Deleted Students
-const deletedStudents = async (req: Request, res: Response) => {
+const deletedStudents = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const result = await deletedStudentsFromDB();
-    console.log("deleted route hitting");
     res.status(201).json({
       success: true,
       message: "All deleted students are successfully retrieved",
       data: result,
     });
   } catch (error) {
-    console.log(error);
-    console.log("deleted route hitting");
+    next(error);
   }
 };
 
