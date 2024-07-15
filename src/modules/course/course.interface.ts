@@ -10,5 +10,5 @@ export type ICourse = {
   code: string;
   credit: number;
   isDeleted: boolean;
-  preRequisite: IPreRequisiteCourse[];
+  preRequisiteCourse: [IPreRequisiteCourse];
 };

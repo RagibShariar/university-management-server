@@ -52,10 +52,12 @@ const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
   } else if (err?.code === 11000) {
     statusCode = httpStatus.CONFLICT;
     message = "Duplicate entry error";
+    const match = err.message.match(/"([^"]*)"/);
+    const extractedMessage = match && match[1];
     errorSource = [
       {
-        path: err?.keyValue?.name,
-        message: `${err?.keyValue.name} is already exists`,
+        path: "",
+        message: `${extractedMessage} is already exists`,
       },
     ];
   } else if (err instanceof ApiError) {
@@ -82,7 +84,7 @@ const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
     success: false,
     message,
     errorSource,
-    myError: err,
+    // myError: err,
     errorStack: config.node_env === "development" ? err?.stack : "",
   });
 };

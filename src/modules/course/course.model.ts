@@ -23,7 +23,6 @@ const courseSchema = new mongoose.Schema<ICourse>(
     prefix: {
       type: String,
       required: true,
-      unique: true,
       trim: true,
     },
     code: {
@@ -41,7 +40,7 @@ const courseSchema = new mongoose.Schema<ICourse>(
       type: Boolean,
       default: false,
     },
-    preRequisite: [preRequisiteCourseSchema],
+    preRequisiteCourse: [preRequisiteCourseSchema],
   },
   { timestamps: true }
 );
