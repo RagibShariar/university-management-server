@@ -11,35 +11,15 @@ const createNameValidationSchema = z.object({
   lastName: z.string().trim(),
 });
 
-const createGuardianValidationSchema = z.object({
-  fatherName: z.string().trim(),
-  fatherOccupation: z.string().trim(),
-  fatherContactNo: z.string().trim(),
-  fatherEmail: z.string().trim().optional(),
-  motherName: z.string().trim(),
-  motherOccupation: z.string().trim(),
-  motherContactNo: z.string().trim(),
-  motherEmail: z.string().trim().optional(),
-});
-
-const createLocalGuardianValidationSchema = z.object({
-  name: z.string().trim(),
-  occupation: z.string().trim(),
-  contactNo: z.string().trim(),
-  email: z.string().trim().optional(),
-  address: z.string().trim(),
-  relation: z.string().trim(),
-});
-
-//! Student Zod Validation
-export const createStudentValidationSchema = z.object({
+//! Faculty Zod Validation
+export const createFacultyValidationSchema = z.object({
   // body: z.object({
 
   password: z
     .string()
     .min(6, { message: "password must be at least 6 characters or longer" }).optional(),
 
-  student: z.object({
+  faculty: z.object({
     name: createNameValidationSchema,
     email: z.string().email().trim(),
     gender: z.enum(["male", "female", "others"]),
@@ -48,7 +28,7 @@ export const createStudentValidationSchema = z.object({
       .string({
         required_error: "Contact num is required",
         invalid_type_error: "Contact No must be a string",
-       })
+      })
       .trim()
       .min(1, { message: "Contact num is required" }),
     emergencyContactNo: z.string().trim(),
@@ -65,11 +45,9 @@ export const createStudentValidationSchema = z.object({
       "Separated",
       "Partnered",
     ]),
-    guardian: createGuardianValidationSchema.required(),
-    localGuardian: createLocalGuardianValidationSchema.required(),
     image: z.string().trim().optional(),
-    admissionSemester: z.string(),
     academicDepartment: z.string(),
+    academicFaculty: z.string(),
   }),
 });
 // });
@@ -94,31 +72,11 @@ const updateNameValidationSchema = z.object({
     .optional(),
 });
 
-const updateGuardianValidationSchema = z.object({
-  fatherName: z.string().trim().optional(),
-  fatherOccupation: z.string().trim().optional(),
-  fatherContactNo: z.string().trim().optional(),
-  fatherEmail: z.string().trim().optional(),
-  motherName: z.string().trim().optional(),
-  motherOccupation: z.string().trim().optional(),
-  motherContactNo: z.string().trim().optional(),
-  motherEmail: z.string().trim().optional(),
-});
-
-const updateLocalGuardianValidationSchema = z.object({
-  name: z.string().trim().optional(),
-  occupation: z.string().trim().optional(),
-  contactNo: z.string().trim().optional(),
-  email: z.string().trim().optional(),
-  address: z.string().trim().optional(),
-  relation: z.string().trim().optional(),
-});
-
-//! Student update Zod Validation
-export const updateStudentValidationSchema = z.object({
+//! Faculty update Zod Validation
+export const updateFacultyValidationSchema = z.object({
   // body: z.object({
 
-  student: z.object({
+  faculty: z.object({
     name: updateNameValidationSchema.optional(),
     email: z
       .string({ invalid_type_error: "Email must be a string" })
@@ -174,14 +132,12 @@ export const updateStudentValidationSchema = z.object({
         }
       )
       .optional(),
-    guardian: updateGuardianValidationSchema.optional(),
-    localGuardian: updateLocalGuardianValidationSchema.optional(),
     image: z
       .string({ invalid_type_error: "Image must be a string" })
       .trim()
       .optional(),
-    admissionSemester: z
-      .string({ invalid_type_error: "Admission semester must be a string" })
+    admissionFaculty: z
+      .string({ invalid_type_error: "Academic faculty must be a string" })
       .optional(),
     academicDepartment: z
       .string({ invalid_type_error: "Academic department must be a string" })

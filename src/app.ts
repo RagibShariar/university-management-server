@@ -5,6 +5,7 @@ import notFound from "./middlewares/notFound";
 import academicDepartmentRouter from "./modules/academicDepartment/academicDepartment.route";
 import academicFacultyRouter from "./modules/academicFaculty/academicFaculty.route";
 import academicSemesterRouter from "./modules/academicSemester/academicSemester.route";
+import facultyRouter from "./modules/faculty/faculty.route";
 import studentRouter from "./modules/student/student.route";
 import userRouter from "./modules/user/user.route";
 
@@ -24,6 +25,7 @@ app.use("/api/v1/students", studentRouter);
 app.use("/api/v1/academic-semesters", academicSemesterRouter);
 app.use("/api/v1/academic-faculty", academicFacultyRouter);
 app.use("/api/v1/academic-department", academicDepartmentRouter);
+app.use("/api/v1/faculties", facultyRouter);
 
 //global error handler
 app.use(globalErrorHandler);
