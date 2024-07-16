@@ -15,13 +15,16 @@ const getAllCoursesFromDb = async () => {
 
 // Get single course
 const getSingleCourseFromDb = async (id: string) => {
-  const result = await Course.findById(id);
+  const result = await Course.findById(id).populate(
+    "preRequisiteCourse.course"
+  );
   return result;
 };
 
 // Update a single course
 const updateCourseToDb = async (id: string, payload: Partial<ICourse>) => {
-  const result = await Course.findByIdAndUpdate(id, payload, {
+  const { preRequisiteCourse, ...remainingCourseData } = payload;
+  const result = await Course.findByIdAndUpdate(id, remainingCourseData, {
     new: true,
     runValidators: true,
   });

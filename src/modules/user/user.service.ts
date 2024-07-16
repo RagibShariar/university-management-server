@@ -64,6 +64,7 @@ const createStudentToDB = async (password: string, studentData: IStudent) => {
     await session.abortTransaction(); // session abort
     await session.endSession(); // session end
     throw new ApiError(500, "Something went wrong while creating a student");
+    console.log(error);
   }
 };
 

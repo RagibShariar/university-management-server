@@ -6,6 +6,7 @@ import {
   deleteCourseFromDB,
   getAllCoursesFromDb,
   getSingleCourseFromDb,
+  updateCourseToDb,
 } from "./course.service";
 
 // Create a new course
@@ -35,11 +36,11 @@ const getSingleCourse = asyncHandler(async (req, res) => {
 });
 
 // Update a single course
-// const updateCourse = asyncHandler(async (req, res) => {
-//   const { id, course:courseData } = req.params;
-//   const result = await updateCourseToDb(id, courseData);
-//   ApiResponse(res, httpStatus.OK, "Course updated successfully", result);
-// });
+const updateCourse = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  const result = await updateCourseToDb(id, req.body);
+  ApiResponse(res, httpStatus.OK, "Course updated successfully", result);
+});
 
 // soft Delete a single course
 const deleteCourse = asyncHandler(async (req, res) => {
@@ -48,4 +49,10 @@ const deleteCourse = asyncHandler(async (req, res) => {
   ApiResponse(res, httpStatus.OK, "Course deleted successfully", result);
 });
 
-export { createCourse, deleteCourse, getAllCourses, getSingleCourse };
+export {
+  createCourse,
+  deleteCourse,
+  getAllCourses,
+  getSingleCourse,
+  updateCourse,
+};
