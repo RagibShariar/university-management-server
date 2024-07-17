@@ -1,12 +1,14 @@
 import bcrypt from "bcrypt";
 import httpStatus from "http-status";
+import jwt from "jsonwebtoken";
+import { config } from "../../config";
 import ApiError from "../../utils/ApiError";
 import { User } from "../user/user.model";
 import { ILoginUser } from "./auth.interface";
 
 const loginUser = async (payload: ILoginUser) => {
   const isUserExists = await User.findOne({ id: payload?.id });
-  console.log(isUserExists);
+  // console.log(isUserExists);
 
   // check if user exists
   if (!isUserExists) {
@@ -32,7 +34,30 @@ const loginUser = async (payload: ILoginUser) => {
     throw new ApiError(httpStatus.FORBIDDEN, "Password is incorrect");
   }
 
-  //? grant access. send access token, refresh token
+  //? if all ok --> grant access. send access token, refresh token
+
+  const jwtPayload = {
+    id: isUserExists.id,
+    role: isUserExists.role,
+  };
+
+  //* create access token
+  const accessToken = jwt.sign(jwtPayload, config.jwt_access_secret as string, {
+    expiresIn: "7d",
+  });
+
+  //* create refresh token
+  // const refreshToken = jwt.sign(
+  //   jwtPayload,
+  //   config.jwt_refresh_secret as string,
+  //   { expiresIn: "14d", }
+  // );
+
+  return {
+    accessToken,
+
+    needsPasswordChange: isUserExists?.needsPasswordChange,
+  };
 };
 
 export { loginUser };

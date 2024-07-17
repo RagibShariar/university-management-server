@@ -8,12 +8,13 @@ import {
   updateStudent,
 } from "./student.controller";
 import { updateStudentValidationSchema } from "./student.validation";
+import auth from "../../middlewares/auth";
 
 const studentRouter = Router();
 
 // Routes
 // studentRouter.post("/create-student", createStudent);
-studentRouter.get("/", getAllStudents);
+studentRouter.get("/", auth, getAllStudents);
 studentRouter.get("/bin", deletedStudents);
 studentRouter.get("/:id", getSingleStudent);
 studentRouter.patch(
