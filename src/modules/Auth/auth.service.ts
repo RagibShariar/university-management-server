@@ -60,4 +60,11 @@ const loginUser = async (payload: ILoginUser) => {
   };
 };
 
-export { loginUser };
+// change password
+// const changePassword = async (payload) => {
+  
+// }
+
+export const authServices = {
+  loginUser,
+};

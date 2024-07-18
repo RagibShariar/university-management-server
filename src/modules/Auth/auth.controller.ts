@@ -1,11 +1,11 @@
 import httpStatus from "http-status";
 import ApiResponse from "../../utils/ApiResponse";
 import asyncHandler from "../../utils/asyncHandler";
-import { loginUser } from "./auth.service";
-import { config } from "../../config";
+import { authServices } from "./auth.service";
 
-const login = asyncHandler(async (req, res) => {
-  const result = await loginUser(req.body);
+
+const loginUser = asyncHandler(async (req, res) => {
+  const result = await authServices.loginUser(req.body);
 
   // res.cookie("refreshToken", result.refreshToken, {
   //   httpOnly: true,
@@ -15,4 +15,15 @@ const login = asyncHandler(async (req, res) => {
   ApiResponse(res, httpStatus.OK, "User logged in successfully", result);
 });
 
-export { login };
+// change password
+const changePassword = asyncHandler(async (req, res) => {
+  // const result = await authServices.changePassword(req.body);
+  // console.log(req.user);
+
+  ApiResponse(res, httpStatus.OK, "Password changed successfully", null);
+});
+
+export const authController = {
+  loginUser,
+  changePassword,
+};
