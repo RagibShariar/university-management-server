@@ -1,3 +1,5 @@
+import { USER_ROLE } from "./user.constant";
+
 export type IUser = {
   id: string;
   password: string;
@@ -6,3 +8,5 @@ export type IUser = {
   status: "in-progress" | "blocked";
   isDeleted: boolean;
 };
+
+export type IUserRole = keyof typeof USER_ROLE;

@@ -17,7 +17,8 @@ export const createFacultyValidationSchema = z.object({
 
   password: z
     .string()
-    .min(6, { message: "password must be at least 6 characters or longer" }).optional(),
+    .min(6, { message: "password must be at least 6 characters or longer" })
+    .optional(),
 
   faculty: z.object({
     name: createNameValidationSchema,

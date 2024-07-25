@@ -16,7 +16,7 @@ const studentRouter = Router();
 // studentRouter.post("/create-student", createStudent);
 studentRouter.get("/", auth(), getAllStudents);
 studentRouter.get("/bin", deletedStudents);
-studentRouter.get("/:id", getSingleStudent);
+studentRouter.get("/:id", auth(),getSingleStudent);
 studentRouter.patch(
   "/:id",
   validateRequest(updateStudentValidationSchema),

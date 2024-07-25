@@ -1,9 +1,7 @@
-import { Request, Response } from "express";
 import httpStatus from "http-status";
 import ApiResponse from "../../utils/ApiResponse";
 import asyncHandler from "../../utils/asyncHandler";
 import { createFacultyToDB, createStudentToDB } from "./user.service";
-import { createAcademicFacultyToDb } from "../academicFaculty/academicFaculty.service";
 
 // Create a new student
 const createStudent = asyncHandler(async (req, res) => {
@@ -20,16 +18,26 @@ const createStudent = asyncHandler(async (req, res) => {
   ApiResponse(res, httpStatus.CREATED, "Student created successfully", result);
 });
 
-
-// create a new faculty 
+// create a new faculty
 const createFaculty = asyncHandler(async (req, res) => {
   const { password, faculty: facultyData } = req.body;
   const result = await createFacultyToDB(password, facultyData);
 
   ApiResponse(res, httpStatus.CREATED, "Faculty created successfully", result);
-})
+});
+
+// create a new admin
+const createAdmin = asyncHandler(async (req, res) => {
+  const { password, admin: adminData } = req.body;
+  console.log(adminData);
+
+  const result = await createStudentToDB(password, adminData);
+
+  ApiResponse(res, httpStatus.CREATED, "Admin created successfully", result);
+});
 
 export const userController = {
   createStudent,
-  createFaculty
+  createFaculty,
+  createAdmin,
 };
