@@ -3,7 +3,6 @@ import ApiResponse from "../../utils/ApiResponse";
 import asyncHandler from "../../utils/asyncHandler";
 import { authServices } from "./auth.service";
 
-
 const loginUser = asyncHandler(async (req, res) => {
   const result = await authServices.loginUser(req.body);
 
@@ -17,10 +16,11 @@ const loginUser = asyncHandler(async (req, res) => {
 
 // change password
 const changePassword = asyncHandler(async (req, res) => {
-  // const result = await authServices.changePassword(req.body);
   // console.log(req.user);
+  // console.log(req.body);
+  const result = await authServices.changePassword(req.user, req.body);
 
-  ApiResponse(res, httpStatus.OK, "Password changed successfully", null);
+  ApiResponse(res, httpStatus.OK, "Password changed successfully", result);
 });
 
 export const authController = {

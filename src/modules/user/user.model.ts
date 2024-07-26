@@ -14,10 +14,15 @@ const userSchema = new Schema<IUser>(
       type: String,
       minlength: [6, "password must be at least 6 characters or longer"],
       required: [true, "Password is required"],
+      select: 0,
     },
     needsPasswordChange: {
       type: Boolean,
       default: true,
+    },
+    passwordChangedAt: {
+      type: Date,
+      optional: true,
     },
     role: {
       type: String,
@@ -40,7 +45,7 @@ const userSchema = new Schema<IUser>(
 //! pre save middleware / hook 👇
 userSchema.pre("save", async function (next) {
   // if password is not modified/updated then next();
-  if (!this.isModified("password")) return next();
+  // if (!this.isModified("password")) return next();
 
   this.password = await bcrypt.hash(
     this.password,
