@@ -10,6 +10,7 @@ import courseRouter from "./modules/course/course.route";
 import facultyRouter from "./modules/faculty/faculty.route";
 import studentRouter from "./modules/student/student.route";
 import userRouter from "./modules/user/user.route";
+import adminRouter from "./modules/admin/admin.route";
 
 const app = express();
 
@@ -30,6 +31,7 @@ app.use("/api/v1/academic-department", academicDepartmentRouter);
 app.use("/api/v1/faculties", facultyRouter);
 app.use("/api/v1/courses", courseRouter);
 app.use("/api/v1/auth", authRouter);
+app.use("/api/v1/admins", adminRouter)
 
 //global error handler
 app.use(globalErrorHandler);
