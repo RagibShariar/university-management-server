@@ -5,8 +5,14 @@ import { createStudentValidationSchema } from "../student/student.validation";
 import { userController } from "./user.controller";
 import auth from "../../middlewares/auth";
 import { USER_ROLE } from "./user.constant";
+import { createAdminValidationSchema } from "../admin/admin.validation";
 
 const userRouter = Router();
+
+userRouter.post(
+  "/create-admin",
+  validateRequest(createAdminValidationSchema),
+  userController.createAdmin);
 
 userRouter.post(
   "/create-student",

@@ -1,7 +1,11 @@
 import httpStatus from "http-status";
 import ApiResponse from "../../utils/ApiResponse";
 import asyncHandler from "../../utils/asyncHandler";
-import { createFacultyToDB, createStudentToDB } from "./user.service";
+import {
+  createAdminToDB,
+  createFacultyToDB,
+  createStudentToDB,
+} from "./user.service";
 
 // Create a new student
 const createStudent = asyncHandler(async (req, res) => {
@@ -29,9 +33,8 @@ const createFaculty = asyncHandler(async (req, res) => {
 // create a new admin
 const createAdmin = asyncHandler(async (req, res) => {
   const { password, admin: adminData } = req.body;
-  console.log(adminData);
 
-  const result = await createStudentToDB(password, adminData);
+  const result = await createAdminToDB(password, adminData);
 
   ApiResponse(res, httpStatus.CREATED, "Admin created successfully", result);
 });

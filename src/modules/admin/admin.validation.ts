@@ -16,7 +16,7 @@ export const createAdminValidationSchema = z.object({
     .min(6, { message: "Password must be at least 6 characters or longer" })
     .optional(),
 
-  faculty: z.object({
+  admin: z.object({
     name: createNameValidationSchema,
     email: z.string().email().trim(),
     gender: z.enum(["male", "female", "others"]),

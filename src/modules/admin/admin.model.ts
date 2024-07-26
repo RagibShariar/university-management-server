@@ -14,6 +14,12 @@ const nameSchema = new Schema<Name>({
 
 const adminSchema = new Schema<IAdmin>(
   {
+    id: {
+      type: String,
+      required: [true, "ID is required"],
+      unique: true,
+      trim: true,
+    },
     user: {
       type: Schema.Types.ObjectId,
       ref: "User",
@@ -35,7 +41,7 @@ const adminSchema = new Schema<IAdmin>(
       required: true,
     },
     dateOfBirth: {
-      type: Date,
+      type: String,
       required: true,
     },
     contactNo: {

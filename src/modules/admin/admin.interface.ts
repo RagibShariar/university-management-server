@@ -13,7 +13,7 @@ export type IAdmin = {
   name: Name;
   email: string;
   gender: "male" | "female";
-  dateOfBirth: Date;
+  dateOfBirth: string;
   contactNo: string;
   emergencyContactNo: string;
   bloodGroup?: "A+" | "A-" | "B+" | "B-" | "AB+" | "AB-" | "O+" | "O-";
