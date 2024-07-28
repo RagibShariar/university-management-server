@@ -43,18 +43,21 @@ const auth = (...user_role: IUserRole[]) => {
         throw new ApiError(httpStatus.FORBIDDEN, "User is blocked");
       }
 
-      // check if user role is valid
-      if (user_role && !user_role.includes(decoded?.role)) {
-        throw new ApiError(httpStatus.UNAUTHORIZED, "Unauthorized request");
-      }
-
       // check if the jwt token issued before the password change
       const jwtIssuedAt = decoded.iat as number;
       if (
         isUserExists.passwordChangedAt &&
         new Date(isUserExists.passwordChangedAt).getTime() / 1000 > jwtIssuedAt
       ) {
-        throw new ApiError(httpStatus.UNAUTHORIZED, "Token is invalid");
+        throw new ApiError(
+          httpStatus.UNAUTHORIZED,
+          "Token is invalid due to password change. please log in again"
+        );
+      }
+
+      // check if user role is valid
+      if (user_role && !user_role.includes(decoded?.role)) {
+        throw new ApiError(httpStatus.UNAUTHORIZED, "Unauthorized request");
       }
 
       // attach user to request object

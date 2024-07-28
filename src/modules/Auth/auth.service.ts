@@ -105,7 +105,66 @@ const changePassword = async (
   return null;
 };
 
-export const authServices = {
+// refresh token
+const refreshToken = async (token: string) => {
+  if (!token) {
+    throw new ApiError(
+      httpStatus.UNAUTHORIZED,
+      "No token found! Unauthorized request"
+    );
+  }
+
+  // verify access token
+  const decoded = jwt.verify(
+    token,
+    config.jwt_refresh_secret as string
+  ) as JwtPayload;
+
+  // check if user exists
+  const isUserExists = await User.findOne({ id: decoded?.id }).select(
+    "+password"
+  );
+  if (!isUserExists) {
+    throw new ApiError(httpStatus.BAD_REQUEST, "User not found");
+  }
+
+  // check if user is deleted
+  if (isUserExists.isDeleted === true) {
+    throw new ApiError(httpStatus.BAD_REQUEST, "User is deleted");
+  }
+
+  // check if user is blocked
+  if (isUserExists.status === "blocked") {
+    throw new ApiError(httpStatus.FORBIDDEN, "User is blocked");
+  }
+
+  // check if the jwt token issued before the password change
+  const jwtIssuedAt = decoded.iat as number;
+  if (
+    isUserExists.passwordChangedAt &&
+    new Date(isUserExists.passwordChangedAt).getTime() / 1000 > jwtIssuedAt
+  ) {
+    throw new ApiError(
+      httpStatus.UNAUTHORIZED,
+      "Token is invalid due to password change. please log in again"
+    );
+  }
+
+  const jwtPayload = {
+    id: isUserExists.id,
+    role: isUserExists.role,
+  };
+
+  //* create new JWT access token
+  const accessToken = jwt.sign(jwtPayload, config.jwt_access_secret as string, {
+    expiresIn: config.jwt_access_expires_in as string,
+  });
+
+  return { accessToken };
+};
+
+export const authService = {
   loginUser,
   changePassword,
+  refreshToken,
 };

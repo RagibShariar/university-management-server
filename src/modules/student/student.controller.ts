@@ -12,7 +12,7 @@ import {
 
 // get all students
 const getAllStudents = async (req: Request, res: Response) => {
-  // console.log(req.user);
+  // console.log(req.cookies);
   try {
     const result = await getAllStudentsFromDB();
     res.status(201).json({

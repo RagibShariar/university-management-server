@@ -8,4 +8,4 @@ export const loginValidationSchema = z.object({
 export const changePasswordValidationSchema = z.object({
   oldPassword: z.string({ required_error: "current password is required" }),
   newPassword: z.string({ required_error: "new password is required" }),
-})
+});
