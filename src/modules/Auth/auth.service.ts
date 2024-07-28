@@ -43,21 +43,21 @@ const loginUser = async (payload: ILoginUser) => {
     role: isUserExists.role,
   };
 
-  //* create access token
+  //* create JWT access token
   const accessToken = jwt.sign(jwtPayload, config.jwt_access_secret as string, {
-    expiresIn: "7d",
+    expiresIn: config.jwt_access_expires_in as string,
   });
 
-  //* create refresh token
-  // const refreshToken = jwt.sign(
-  //   jwtPayload,
-  //   config.jwt_refresh_secret as string,
-  //   { expiresIn: "14d", }
-  // );
+  //* create JWT refresh token
+  const refreshToken = jwt.sign(
+    jwtPayload,
+    config.jwt_refresh_secret as string,
+    { expiresIn: config.jwt_refresh_expires_in as string }
+  );
 
   return {
     accessToken,
-
+    refreshToken,
     needsPasswordChange: isUserExists?.needsPasswordChange,
   };
 };

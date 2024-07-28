@@ -5,6 +5,7 @@ import { config } from "../config";
 import { IUserRole } from "../modules/user/user.interface";
 import ApiError from "../utils/ApiError";
 import asyncHandler from "../utils/asyncHandler";
+import { User } from "../modules/user/user.model";
 
 const auth = (...user_role: IUserRole[]) => {
   return asyncHandler(
@@ -24,6 +25,25 @@ const auth = (...user_role: IUserRole[]) => {
         config.jwt_access_secret as string
       ) as JwtPayload;
 
+      // check if user exists
+      const isUserExists = await User.findOne({ id: decoded?.id }).select(
+        "+password"
+      );
+      if (!isUserExists) {
+        throw new ApiError(httpStatus.BAD_REQUEST, "User not found");
+      }
+
+      // check if user is deleted
+      if (isUserExists.isDeleted === true) {
+        throw new ApiError(httpStatus.BAD_REQUEST, "User is deleted");
+      }
+
+      // check if user is blocked
+      if (isUserExists.status === "blocked") {
+        throw new ApiError(httpStatus.FORBIDDEN, "User is blocked");
+      }
+
+      // check if user role is valid
       if (user_role && !user_role.includes(decoded?.role)) {
         throw new ApiError(httpStatus.UNAUTHORIZED, "Unauthorized request");
       }
