@@ -3,9 +3,9 @@ import httpStatus from "http-status";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { config } from "../config";
 import { IUserRole } from "../modules/user/user.interface";
+import { User } from "../modules/user/user.model";
 import ApiError from "../utils/ApiError";
 import asyncHandler from "../utils/asyncHandler";
-import { User } from "../modules/user/user.model";
 
 const auth = (...user_role: IUserRole[]) => {
   return asyncHandler(
@@ -46,6 +46,15 @@ const auth = (...user_role: IUserRole[]) => {
       // check if user role is valid
       if (user_role && !user_role.includes(decoded?.role)) {
         throw new ApiError(httpStatus.UNAUTHORIZED, "Unauthorized request");
+      }
+
+      // check if the jwt token issued before the password change
+      const jwtIssuedAt = decoded.iat as number;
+      if (
+        isUserExists.passwordChangedAt &&
+        new Date(isUserExists.passwordChangedAt).getTime() / 1000 > jwtIssuedAt
+      ) {
+        throw new ApiError(httpStatus.UNAUTHORIZED, "Token is invalid");
       }
 
       // attach user to request object
