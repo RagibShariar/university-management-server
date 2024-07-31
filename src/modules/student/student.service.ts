@@ -6,16 +6,43 @@ import { IStudent } from "./student.interface";
 import { Student } from "./student.model";
 
 // get all students
-const getAllStudentsFromDB = async () => {
-  const result = await Student.find()
-    .populate("user")
-    .populate("admissionSemester")
-    .populate({
-      path: "academicDepartment",
-      populate: {
-        path: "academicFaculty", // nested populate
-      },
-    });
+const getAllStudentsFromDB = async (query: Record<string, unknown>) => {
+  const queryObj = { ...query };
+
+  console.log("base query: ", query);
+  console.log("queryObj: ", queryObj);
+
+  let searchTerm = "";
+  if (query?.searchTerm) {
+    searchTerm = query?.searchTerm as string;
+  }
+  const searchableFields = [
+    "id",
+    "email",
+    "name.firstName",
+    "name.middleName",
+    "name.lastName",
+  ];
+  // { "email": { $regex: query.searchTerm, $options:'i' } }
+  const searchQuery = Student.find({
+    $or: searchableFields.map((field) => ({
+      [field]: { $regex: searchTerm, $options: "i" },
+    })),
+  });
+
+  // filtering
+  const excludeFields = ["searchTerm", "sort", "page", "limit", "fields"];
+  excludeFields.forEach((el) => delete queryObj[el]);
+
+  const result = await searchQuery.find(queryObj);
+  // .populate("user")
+  // .populate("admissionSemester")
+  // .populate({
+  //   path: "academicDepartment",
+  //   populate: {
+  //     path: "academicFaculty", // nested populate
+  //   },
+  // });
   return result;
 };
 

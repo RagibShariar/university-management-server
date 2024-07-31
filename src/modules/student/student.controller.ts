@@ -14,10 +14,11 @@ import {
 const getAllStudents = async (req: Request, res: Response) => {
   // console.log(req.cookies);
   try {
-    const result = await getAllStudentsFromDB();
+    const result = await getAllStudentsFromDB(req.query);
     res.status(201).json({
       success: true,
       message: "All students are successfully retrieved",
+      totalData: result.length,
       data: result,
     });
   } catch (error: any) {
