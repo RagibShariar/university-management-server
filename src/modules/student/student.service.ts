@@ -23,6 +23,8 @@ const getAllStudentsFromDB = async (query: Record<string, unknown>) => {
     "name.middleName",
     "name.lastName",
   ];
+
+  // partial search
   // { "email": { $regex: query.searchTerm, $options:'i' } }
   const searchQuery = Student.find({
     $or: searchableFields.map((field) => ({
@@ -34,7 +36,24 @@ const getAllStudentsFromDB = async (query: Record<string, unknown>) => {
   const excludeFields = ["searchTerm", "sort", "page", "limit", "fields"];
   excludeFields.forEach((el) => delete queryObj[el]);
 
-  const result = await searchQuery.find(queryObj);
+  const filterQuery = searchQuery.find(queryObj);
+
+  // sorting
+  let sort = "-createdAt";
+  if (query?.sort) {
+    sort = query?.sort as string;
+  }
+
+  const sortQuery = filterQuery.sort(sort);
+
+  // limiting
+  let limit = 1;
+  if (query?.limit) {
+    limit = query?.limit as number;
+  }
+
+  const limitQuery = await sortQuery.limit(limit);
+
   // .populate("user")
   // .populate("admissionSemester")
   // .populate({
@@ -43,7 +62,7 @@ const getAllStudentsFromDB = async (query: Record<string, unknown>) => {
   //     path: "academicFaculty", // nested populate
   //   },
   // });
-  return result;
+  return limitQuery;
 };
 
 // get a single student
